@@ -1,9 +1,9 @@
-import { BadRequestException, HttpException, Injectable, Req, Res, UnauthorizedException, } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable, NotFoundException, Req, Res, UnauthorizedException, } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SignupDto } from "./dto/signup.dto";
 import { UserEntity } from "./entities/userEntity";
-import { Repository } from "typeorm";
+import { Repository } from "typeorm";  
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from "./dto/login.dto";
 import {Request, Response}  from 'express';
@@ -54,7 +54,9 @@ async signin(payload:LoginDto, @Req()req:Request, @Res()res:Response){
    }
    const token = await this.jwtService.signAsync({
       email: user.email,
-      userid: user.userid
+      id: user.id,
+      role:user.role,
+      blocked:user.blocked
    });
    res.cookie('isAuthenticated', token,{
       httpOnly: true,
@@ -100,10 +102,10 @@ async user(headers:any) :Promise<any>{
       const secretOrKey = process.env.JWT_SECRET;
       try{
          const decoded = this.jwtService.verify(token);
-         let userid = decoded["userid"];
-         let user = await this.userRepo.findOneBy({userid});
+         let id = decoded["id"];
+         let user = await this.userRepo.findOneBy({id});
          return{
-            userid,
+            id,
             name:user.firstname, 
             email: user.email, 
             role:user.role
@@ -116,5 +118,35 @@ async user(headers:any) :Promise<any>{
    else{
          throw new UnauthorizedException('invalid or missing bearer token')
       }
+}
+
+
+async blockUser(id:string) {
+   const user = await this.userRepo.findOne({where:{id}});
+console.log(user);
+
+   if (!user) {
+     throw new NotFoundException('user not found');
+   }
+
+   user.blocked = true;
+
+   return await this.userRepo.save(user);
+ }
+
+ async unblockUser(id: string) {
+   const user = await this.userRepo.findOneBy({ id });
+
+   if (!user) {
+     throw new NotFoundException('user not found');
+   }
+
+   user.blocked = false;
+
+   return await this.userRepo.save(user)
+ }
+
+ async userbyId(id:string){
+   return await this.userRepo.findOneBy({id})
 }
 }

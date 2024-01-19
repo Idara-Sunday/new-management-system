@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 @Entity()
 export class UserEntity{
    @PrimaryGeneratedColumn('uuid')
-    userid : string;
+    id : string;
 
     @Column()
     firstname : string;
@@ -17,6 +17,9 @@ export class UserEntity{
 
     @Column()
     email : string;
+
+    @Column({default:false})
+   blocked:boolean;
 
     @Column()
     password : string;

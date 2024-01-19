@@ -1,11 +1,12 @@
-import { Body, Controller, Get, HttpCode, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignupDto } from "./dto/signup.dto";
 import { LoginDto } from "./dto/login.dto";
 import {Request, Response}  from 'express';
-import { AuthGuard } from "@nestjs/passport";
+import { AuthGuard } from "@nestjs/passport"; 
 import { RoleGuard } from "./guard/role.guard";
 import { Roles } from "./guard/role";
+import { BlockGuard } from "./guard/block.guard";
 
 @Controller('project')
 export class AuthController {
@@ -34,5 +35,39 @@ export class AuthController {
     async findUser(){
       return await this.authService.findUsers()
     }
+
+    @UseGuards(AuthGuard())
+    @Get('profile')
+    profile(@Req() req:Request){
+      return req.user
+    }
+    
+
+  @UseGuards(AuthGuard(),RoleGuard)
+  @Roles('admin')
+  @Patch(':id/block')
+  async blockUser(@Param('id') id:string){
+
+    return await this.authService.blockUser(id);
+
+  }
+
+
+@UseGuards(AuthGuard(),RoleGuard)
+@Roles('admin')
+  @Patch(':id/unblock')
+  async unblockUser(@Param('id') id:string){
+
+    return await this.authService.unblockUser(id)
+  }
+
+  @UseGuards(AuthGuard(), BlockGuard)
+  @Get('hello')
+  helloworld(){
+    return `hello world`
+    
+  }
+
+
 
 }
