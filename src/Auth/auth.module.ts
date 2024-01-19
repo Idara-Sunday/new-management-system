@@ -21,10 +21,11 @@ import { BlockGuard } from './guard/block.guard';
                 ('JWT_SECRET'),
                 signOptions:{
                     algorithm: configService.getOrThrow
-                    ('JWT_ALGORITHM')
+                    ('JWT_ALGORITHM'),
+                    expiresIn:configService.getOrThrow('JWT_EXPIRESIN')
                 }
             }),
-            inject: [ConfigService],
+            inject: [ConfigService],    
         }),
         PassportModule.register({
             defaultStrategy: 'jwt'

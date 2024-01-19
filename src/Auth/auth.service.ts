@@ -82,7 +82,7 @@ async logout (@Req()req:Request, @Res()res:Response){
 async findEmail(email:string){
    const mail = await this.userRepo.findOneByOrFail({email})
    if(!mail){
-      throw new UnauthorizedException
+      throw new UnauthorizedException('that email no dey oh')
    }
    return mail;
 }

@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
             const user = await this.authService.findEmail(email)
     
             if(!user){
-                throw new UnauthorizedException();
+                throw new UnauthorizedException('no user was found oooh');
             }
             return user;
         } catch(error){
