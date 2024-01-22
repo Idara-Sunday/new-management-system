@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './Auth/entities/userEntity';
 import { AuthModule } from './Auth/auth.module';
 import { DatabaseModule } from './database/database.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -12,6 +13,15 @@ import { DatabaseModule } from './database/database.module';
     }),
     AuthModule,
     DatabaseModule,
+    MailerModule.forRoot({
+      transport:{
+        host:'',
+        auth:{
+          user:'',
+          pass:''
+        }
+      }
+    })
   ],
 })
 export class AppModule {}

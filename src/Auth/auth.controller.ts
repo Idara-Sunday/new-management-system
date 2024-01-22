@@ -84,7 +84,7 @@ export class AuthController {
   // }
 
 
-  @UseGuards(AuthGuard())
+  @UseGuards()
   @Post('reset-password/:id/:token')
   async resetPassword(@Param() params:['id','token'], @Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
     return await this.authService.resetPassword(req,res,payload)
