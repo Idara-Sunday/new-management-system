@@ -201,6 +201,7 @@ console.log(req.params)
      throw new NotFoundException('invalid id')
    }
  
+   try{
 
      
    const verify = this.jwtService.verify(token);
@@ -232,10 +233,11 @@ console.log(req.params)
       message:'password succesfully changed',
       resave
    })
+}catch(error){
+   // console.log(error)
+   res.send(error)
+}
 
-
-
-   
  }  
 
 
