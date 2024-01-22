@@ -7,6 +7,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { RoleGuard } from "./guard/role.guard";
 import { Roles } from "./guard/role";
 import { BlockGuard } from "./guard/block.guard";
+import { ResetPasswordDTO } from "./dto/reset-password.dto";
+import { forgotPasswordDTO } from "./dto/forgotpassword.dto";
 
 @Controller('project')
 export class AuthController {
@@ -68,6 +70,25 @@ export class AuthController {
     
   }
 
+
+  @UseGuards()
+  @Post('forgot-password')
+  async forgotPassword(@Req() req:Request,@Res() res:Response,@Body() payload:forgotPasswordDTO){
+    return await this.authService.forgotPassword(req,res,payload)
+  }
+
+  // @UseGuards(AuthGuard())
+  // @Get('reset-password/:id/:token')
+  // async resetPassword(@Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
+
+  // }
+
+
+  @UseGuards(AuthGuard())
+  @Post('reset-password/:id/:token')
+  async resetPassword(@Param() params:['id','token'], @Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
+    return await this.authService.resetPassword(req,res,payload)
+  }
 
 
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException, Req, Res, UnauthorizedException, } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, Req, Res, UnauthorizedException, } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SignupDto } from "./dto/signup.dto";
@@ -7,6 +7,8 @@ import { Repository } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from "./dto/login.dto";
 import {Request, Response}  from 'express';
+import { ResetPasswordDTO } from "./dto/reset-password.dto";
+import { forgotPasswordDTO } from "./dto/forgotpassword.dto";
 
 @Injectable()
 export class AuthService {
@@ -149,4 +151,93 @@ console.log(user);
  async userbyId(id:string){
    return await this.userRepo.findOneBy({id})
 }
+
+   
+  async forgotPassword(@Req() req:Request, @Res() res:Response, forgotPasswordPayload:forgotPasswordDTO) {
+   const {email} = forgotPasswordPayload
+   // const requestUser= req.user;
+
+   // // const mail = requestUser;
+   // const email = requestUser['email']
+   
+   
+
+   const findUser = await this.userRepo.findOne({where:{email}});
+
+   
+   if(!findUser){
+     throw new HttpException('No user found',HttpStatus.NOT_FOUND) 
+   }
+   // const response = res.send('user found');
+   // return {
+   //    response
+   // }
+   const signOptions = {
+      expiresIn:'1.5m',
+
+   }
+   // const secret = process.env.JWT_SECRET + findUser.password;
+   const payload = {
+      email:findUser.email,
+      id:findUser.id
+   }
+
+   const token =  await this.jwtService.signAsync(payload,signOptions);
+   const link = `http://localhost:7000/api/v1/project/reset-password/${findUser.id}/${token}` 
+
+   console.log(link);
+
+   res.send('a reset password has been sent to your email')
+   
+
+ }
+
+ async resetPassword(@Req() req:Request, @Res() res:Response, payload:ResetPasswordDTO){
+console.log(req.params)
+   const {id,token} = req.params;
+   const user = await this.userRepo.findOne({where:{id:id}})
+
+   if(!user){
+     throw new NotFoundException('invalid id')
+   }
+ 
+
+     
+   const verify = this.jwtService.verify(token);
+  
+
+   let verifiedId = verify["id"];
+   // console.log(verifiedId);
+   if(id !== verifiedId){
+      throw new NotFoundException('user id is invalid')
+   }
+
+
+   const {newPassword,confirmPassword} = payload;
+
+   if(newPassword !== confirmPassword){
+      throw new HttpException('Passwords does not match',HttpStatus.BAD_REQUEST)
+   }
+
+//   const userNewPassword = user.password = newPassword;
+  const hashPassword = await bcrypt.hash(newPassword,10);
+//   console.log(user);
+   user.password=hashPassword
+   
+  
+//   return await this.userRepo.save(user)
+   const resave = await this.userRepo.save(user);
+
+   res.send({
+      message:'password succesfully changed',
+      resave
+   })
+
+
+
+   
+ }  
+
+
+
 }
