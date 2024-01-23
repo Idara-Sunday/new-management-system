@@ -71,10 +71,10 @@ export class AuthController {
   }
 
 
-  @UseGuards()
+  // @UseGuards() 
   @Post('forgot-password')
   async forgotPassword(@Req() req:Request,@Res() res:Response,@Body() payload:forgotPasswordDTO){
-    return await this.authService.forgotPassword(req,res,payload)
+    return await this.authService.forgotPassword(req,res,payload) 
   }
 
   // @UseGuards(AuthGuard())
@@ -84,7 +84,7 @@ export class AuthController {
   // }
 
 
-  @UseGuards()
+  // @UseGuards() 
   @Post('reset-password/:id/:token')
   async resetPassword(@Param() params:['id','token'], @Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
     return await this.authService.resetPassword(req,res,payload)
