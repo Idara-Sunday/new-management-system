@@ -31,7 +31,7 @@ export class AuthController {
       return await this.authService.logout(req, res)
     }
 
-    @Get()
+    @Get('allusers')
     @UseGuards(AuthGuard(), RoleGuard)
     @Roles('admin', 'vendor')
     async findUser(){
