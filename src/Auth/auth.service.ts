@@ -190,6 +190,8 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync(payload, signOptions);
     const link = `http://localhost:7000/api/v1/project/reset-password/${findUser.id}/${token}`;
+    console.log(link);
+
 try{
    await this.mailerService.sendMail({
       to:`${findUser.email}`,
@@ -198,7 +200,6 @@ try{
       text:`This is your reset password link`,
       html:`<b><a href="${link}">Reset Password link</a></b>`
     })
-    console.log(link);
 
    return res.send({
       message:'a reset password link has been sent to your email'

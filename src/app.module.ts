@@ -15,10 +15,10 @@ import { MailerModule } from '@nestjs-modules/mailer';
     DatabaseModule,
     MailerModule.forRoot({
       transport:{
-        host:'sandbox.smtp.mailtrap.io',
+        host:process.env.MAIL_HOST ,
         auth:{
-          user:'71df426ad004e2',
-          pass:'22cfd87cf31ce0'
+          user:process.env.MAIL_USER ,
+          pass:process.env.MAIL_PASS
         }
       }
     })
