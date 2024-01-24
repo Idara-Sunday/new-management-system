@@ -15,7 +15,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
     DatabaseModule,
     MailerModule.forRoot({
       transport:{
-        host:process.env.MAIL_HOST ,
+        // host:process.env.MAIL_HOST ,
+        service:'gmail',
         auth:{
           user:process.env.MAIL_USER ,
           pass:process.env.MAIL_PASS

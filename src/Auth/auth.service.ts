@@ -195,7 +195,7 @@ export class AuthService {
 try{
    await this.mailerService.sendMail({
       to:`${findUser.email}`,
-      from:'me@gmail.com',
+      from:'System😊😊😊<menace03032001@gmail.com>',
       subject:'Reset Password link',
       text:`This is your reset password link`,
       html:`<b><a href="${link}">Reset Password link</a></b>`
