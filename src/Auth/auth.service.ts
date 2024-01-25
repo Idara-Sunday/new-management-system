@@ -24,7 +24,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-    private jwtService: JwtService, private mailerService:MailerService
+    private jwtService: JwtService,
+    private mailerService: MailerService,
   ) {}
 
   async signup(payload: SignupDto) {
@@ -176,7 +177,7 @@ export class AuthService {
       throw new HttpException('No user found', HttpStatus.NOT_FOUND);
     }
     // const response = res.send('user found');
-    // return {     
+    // return {
     //    response
     // }
     const signOptions = {
@@ -189,24 +190,24 @@ export class AuthService {
     };
 
     const token = await this.jwtService.signAsync(payload, signOptions);
-    const link = `http://localhost:7000/api/v1/project/reset-password/${findUser.id}/${token}`;
+    const link = `http://localhost:7000/reset-password/${findUser.id}/${token}`;
     console.log(link);
 
-try{
-   await this.mailerService.sendMail({
-      to:`${findUser.email}`,
-      from:'System😊😊😊<menace03032001@gmail.com>',
-      subject:'Reset Password link',
-      text:`This is your reset password link`,
-      html:`<b><a href="${link}">Reset Password link</a></b>`
-    })
+    try {
+      await this.mailerService.sendMail({
+        to: `${findUser.email}`,
+        from: 'System😊😊😊<menace03032001@gmail.com>',
+        subject: 'Reset Password link',
+        text: `This is your reset password link`,
+        html: `<b><a href="${link}">Reset Password link</a></b>`,
+      });
 
-   return res.send({
-      message:'a reset password link has been sent to your email'
-   });
-  } catch(error){
-    res.send(error)
-  }
+      return res.send({
+        message: 'a reset password link has been sent to your email',
+      });
+    } catch (error) {
+      res.send(error);
+    }
   }
 
   async resetPassword(
@@ -255,13 +256,13 @@ try{
     }
   }
 
-  googleLogin(req){
-    if(!req.user){
-      return 'No User from google'
+  googleLogin(req) {
+    if (!req.user) {
+      return 'No User from google';
     }
     return {
       message: 'User Info from google',
-      user:req.user
-    }
+      user: req.user,
+    };
   }
 }

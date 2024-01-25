@@ -10,7 +10,7 @@ import { BlockGuard } from "./guard/block.guard";
 import { ResetPasswordDTO } from "./dto/reset-password.dto";
 import { forgotPasswordDTO } from "./dto/forgotpassword.dto";
 
-@Controller('project')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
