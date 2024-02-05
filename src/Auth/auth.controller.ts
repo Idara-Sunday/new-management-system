@@ -9,6 +9,7 @@ import { Roles } from "./guard/role";
 import { BlockGuard } from "./guard/block.guard";
 import { ResetPasswordDTO } from "./dto/reset-password.dto";
 import { forgotPasswordDTO } from "./dto/forgotpassword.dto";
+import { GoogleAuthGuard } from "./guard/google.guard";
 
 @Controller()
 export class AuthController {
@@ -91,15 +92,17 @@ export class AuthController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('google'))
+  // @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   async googleAuth(@Req() req){
   }
 
   @Get('auth/google/callback')
-  @UseGuards(AuthGuard('google'))
+  // @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req){
     return this.authService.googleLogin(req)
   }
+ 
 
-
-}
+} 
