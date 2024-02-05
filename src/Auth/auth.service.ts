@@ -19,14 +19,25 @@ import { Request, Response } from 'express';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { forgotPasswordDTO } from './dto/forgotpassword.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UserDetails } from 'src/utils/userType';
+import { GoogleUsers } from './entities/googleUserEntity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,@InjectRepository(GoogleUsers) private readonly GoogleUserRepo:Repository<GoogleUsers>,
     private jwtService: JwtService,
     private mailerService: MailerService,
   ) {}
+
+  async validateGoogleUser(details:UserDetails){ 
+
+    console.log(details);
+    const user = await this.GoogleUserRepo.findOne({where:{email:details.email}});
+
+    if(user) return user
+    
+  }
 
   async signup(payload: SignupDto) {
     payload.email = payload.email.toLowerCase();

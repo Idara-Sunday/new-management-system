@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';  
 import { UserEntity } from '../Auth/entities/userEntity';
+import { GoogleUsers } from 'src/Auth/entities/googleUserEntity';
  
 @Module({   
     imports: [
@@ -13,7 +14,7 @@ import { UserEntity } from '../Auth/entities/userEntity';
               username: configService.getOrThrow('DB_USER'),
               password: configService.getOrThrow('DB_PASSWORD'),
               database: configService.getOrThrow('DB_DATABASE'),
-              entities: [UserEntity],
+              entities: [UserEntity,GoogleUsers],
               synchronize: configService.getOrThrow('DB_SYNC'),
             }),
             inject: [ConfigService]

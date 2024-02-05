@@ -10,10 +10,11 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { RoleGuard } from './guard/role.guard';
 import { BlockGuard } from './guard/block.guard';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { GoogleUsers } from './entities/googleUserEntity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserEntity]),
+        TypeOrmModule.forFeature([UserEntity,GoogleUsers]),
            JwtModule.registerAsync({
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) =>
