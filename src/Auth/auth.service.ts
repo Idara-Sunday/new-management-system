@@ -42,6 +42,11 @@ export class AuthService {
     
   }
 
+  async googleUserbyId(id:number) {
+    return await this.GoogleUserRepo.findOneBy({ id });
+  }
+
+
   async signup(payload: SignupDto) {
     payload.email = payload.email.toLowerCase();
     const { email, password, ...rest } = payload;
