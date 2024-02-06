@@ -35,7 +35,10 @@ export class AuthService {
     console.log(details);
     const user = await this.GoogleUserRepo.findOne({where:{email:details.email}});
 
-    if(user) return user
+    if(user) return user;
+
+    const newUser = this.GoogleUserRepo.create(details);
+    return this.GoogleUserRepo.save(newUser)
     
   }
 
@@ -267,7 +270,9 @@ export class AuthService {
     }
   }
 
-  googleLogin(req) {
+  googleLogin(@Req() req:Request) {
+    console.log(req.user);
+    
     if (!req.user) {
       return 'No User from google';
     }

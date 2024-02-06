@@ -11,6 +11,7 @@ import { RoleGuard } from './guard/role.guard';
 import { BlockGuard } from './guard/block.guard';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { GoogleUsers } from './entities/googleUserEntity';
+import { SessionSerializer } from 'src/utils/userSerializer';
 
 @Module({
     imports: [
@@ -30,12 +31,13 @@ import { GoogleUsers } from './entities/googleUserEntity';
             inject: [ConfigService],    
         }),
         PassportModule.register({
-            defaultStrategy: 'jwt'
+            defaultStrategy: 'jwt',
+            session:true
         }),
 
       ],
       controllers: [AuthController],
-      providers: [AuthService, RoleGuard, JwtStrategy,GoogleStrategy],
-      exports: [AuthService, JwtStrategy, PassportModule,GoogleStrategy],
+      providers: [GoogleStrategy,SessionSerializer,AuthService, RoleGuard, JwtStrategy,],
+      exports: [AuthService, JwtStrategy, PassportModule,GoogleStrategy,SessionSerializer], 
     })
 export class AuthModule {}

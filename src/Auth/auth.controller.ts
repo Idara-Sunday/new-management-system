@@ -91,18 +91,25 @@ export class AuthController {
     return await this.authService.resetPassword(req,res,payload)
   }
 
-  @Get()
+  @Get('auth/google/login')
   // @UseGuards(AuthGuard('google'))
   @UseGuards(GoogleAuthGuard)
-  async googleAuth(@Req() req){
+  async googleAuth(){
+  return{ msg:'Google Authentication'}
   }
 
+   
   @Get('auth/google/callback')
-  // @UseGuards(AuthGuard('google'))
   @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Req() req){
-    return this.authService.googleLogin(req)
+  welcome(){
+     return {msg:'Welcome to this platform'}
   }
  
+  @Get('status')
+  // @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req:Request){
+    return this.authService.googleLogin(req)
+  }
+
 
 } 
