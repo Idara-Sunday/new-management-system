@@ -15,6 +15,11 @@ import { GoogleAuthGuard } from "./guard/google.guard";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get('testing')
+  getter(){
+    return 'Test run mode'
+  }
+
   @Post('signup')
     async signupUser (@Body() payload: SignupDto){
       const user = await this.authService.signup(payload); 
@@ -90,6 +95,11 @@ export class AuthController {
   async resetPassword(@Param() params:['id','token'], @Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
     return await this.authService.resetPassword(req,res,payload)
   }
+  @Get('status')
+  // @UseGuards(AuthGuard('google')) 
+  googleAuthRedirect(@Req() req:Request){
+    return this.authService.googleLogin(req)
+  }
 
   @Get('auth/google/login')
   // @UseGuards(AuthGuard('google'))
@@ -101,15 +111,12 @@ export class AuthController {
    
   @Get('auth/google/callback')
   @UseGuards(GoogleAuthGuard)
+
   welcome(){
      return {msg:'Welcome to this platform'}
   }
  
-  @Get('status')
-  // @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req:Request){
-    return this.authService.googleLogin(req)
-  }
+  
 
 
 } 

@@ -19,5 +19,5 @@ export class SessionSerializer extends PassportSerializer{
        console.log('Deserialize User')
        console.log(user);
        return user ? done(null,user) : done(null,null)
-    }
+    }  
 } 
