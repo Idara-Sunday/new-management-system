@@ -95,6 +95,8 @@ export class AuthController {
   async resetPassword(@Param() params:['id','token'], @Req() req:Request,@Res() res:Response, @Body() payload:ResetPasswordDTO){
     return await this.authService.resetPassword(req,res,payload)
   }
+
+  
   @Get('status')
   // @UseGuards(AuthGuard('google')) 
   googleAuthRedirect(@Req() req:Request){

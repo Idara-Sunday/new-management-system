@@ -82,10 +82,10 @@ export class AuthService {
       .where('user.email = :email', { email: payload.email })
       .getOne();
     if (!user) {
-      throw new HttpException('NO EMAIL FOUND', 400);
+      throw new HttpException('NO EMAIL FOUND', 404);
     }
     if (!(await bcrypt.compare(password, user.password))) {
-      throw new HttpException('SORRY PASSWORD NOT FOUND', 400);
+      throw new HttpException('SORRY PASSWORD NOT FOUND', 404);
     }
     const token = await this.jwtService.signAsync({
       email: user.email,
@@ -286,4 +286,4 @@ export class AuthService {
       user: req.user,
     };
   }
-}
+}  
