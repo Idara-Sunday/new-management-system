@@ -8,8 +8,8 @@ import { AuthService } from "../auth.service";
 export class GoogleStrategy extends PassportStrategy(Strategy,'google') {
     constructor(@Inject(AuthService) private readonly authService:AuthService){
         super({
-            clientID: '713595732177-32rf8op1c50ltdjalhdaaa92lemd3i18.apps.googleusercontent.com',
-            clientSecret:'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',
+            clientID:process.env.CLIENTID,
+            clientSecret:process.env.CLIENTSECRET,
             callbackURL:`http://localhost:9000/auth/google/callback`,
             scope:['profile','email']  
         })  
