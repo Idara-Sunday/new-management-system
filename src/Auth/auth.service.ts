@@ -85,7 +85,7 @@ export class AuthService {
       throw new HttpException('NO EMAIL FOUND', 404);
     }
     if (!(await bcrypt.compare(password, user.password))) {
-      throw new HttpException('SORRY PASSWORD NOT FOUND', 404);
+      throw new HttpException('SORRYWRON, WRONG PASSWORD ', 404);
     }
     const token = await this.jwtService.signAsync({
       email: user.email,
@@ -130,7 +130,6 @@ export class AuthService {
 
     if (authorizationHeader) {
       const token = authorizationHeader.replace('Bearer', '').trim();
-      // console.log(token);
       const secretOrKey = process.env.JWT_SECRET;
       try {
         const decoded = this.jwtService.verify(token);
@@ -152,7 +151,6 @@ export class AuthService {
 
   async blockUser(id: string) {
     const user = await this.userRepo.findOne({ where: { id } });
-    console.log(user);
 
     if (!user) {
       throw new NotFoundException('user not found');
@@ -210,7 +208,7 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync(payload, signOptions);
     const link = `http://localhost:7000/reset-password/${findUser.id}/${token}`;
-    console.log(link);
+    // console.log(link);
 
     try {
       await this.mailerService.sendMail({
@@ -270,7 +268,6 @@ export class AuthService {
         message: 'password succesfully changed',
       });
     } catch (error) {
-      // console.log(error)
       res.send(error);
     }
   }
