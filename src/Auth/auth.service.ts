@@ -183,24 +183,17 @@ export class AuthService {
     forgotPasswordPayload: forgotPasswordDTO,
   ) {
     const { email } = forgotPasswordPayload;
-    // const requestUser= req.user;
-
-    // // const mail = requestUser;
-    // const email = requestUser['email']
+   
 
     const findUser = await this.userRepo.findOne({ where: { email } });
 
     if (!findUser) {
       throw new HttpException('No user found', HttpStatus.NOT_FOUND);
     }
-    // const response = res.send('user found');
-    // return {
-    //    response
-    // }
+   
     const signOptions = {
       expiresIn: '1.5m',
     };
-    // const secret = process.env.JWT_SECRET + findUser.password;
     const payload = {
       email: findUser.email,
       id: findUser.id,
@@ -256,12 +249,9 @@ export class AuthService {
         );
       }
 
-      //   const userNewPassword = user.password = newPassword;
       const hashPassword = await bcrypt.hash(newPassword, 10);
-      //   console.log(user);
       user.password = hashPassword;
 
-      //   return await this.userRepo.save(user)
       const resave = await this.userRepo.save(user);
 
       res.send({
