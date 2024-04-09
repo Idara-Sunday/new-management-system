@@ -32,7 +32,6 @@ export class AuthService {
 
   async validateGoogleUser(details:UserDetails){ 
 
-    console.log(details);
     const user = await this.GoogleUserRepo.findOne({where:{email:details.email}});
 
     if(user) return user;

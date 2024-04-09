@@ -14,10 +14,12 @@ export class BlockGuard implements CanActivate {
         console.log(user);
 
         // const findUser = await this.blockService.userbyId(user);
+      
 
-        if(!user || user.blocked){
+        if(!user || user.blocked ){
             throw new UnauthorizedException(`You're banned from this platform`)
         }
+
         return true
     
     }
