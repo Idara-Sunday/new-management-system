@@ -56,7 +56,7 @@ export class AuthService {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
     try {
-      const user = await this.userRepo.create({
+      const user =  this.userRepo.create({
         email,
         password: hashedPassword,
         ...rest,
@@ -129,7 +129,7 @@ export class AuthService {
 
     if (authorizationHeader) {
       const token = authorizationHeader.replace('Bearer', '').trim();
-      const secretOrKey = process.env.JWT_SECRET;
+      // const secretOrKey = process.env.JWT_SECRET;
       try {
         const decoded = this.jwtService.verify(token);
         let id = decoded['id'];
@@ -251,7 +251,8 @@ export class AuthService {
       const hashPassword = await bcrypt.hash(newPassword, 10);
       user.password = hashPassword;
 
-      const resave = await this.userRepo.save(user);
+      // const resave = await this.userRepo.save(user);
+      await this.userRepo.save(user);
 
       res.send({
         message: 'password succesfully changed',
@@ -262,8 +263,6 @@ export class AuthService {
   }
 
   googleLogin(@Req() req:Request) {
-    console.log(req.user);
-    
     if (!req.user) {
       return 'No User from google';
     }
